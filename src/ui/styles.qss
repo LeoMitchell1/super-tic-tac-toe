@@ -1,0 +1,85 @@
+
+/* Main window */
+QMainWindow {
+    background-color: #ffffff;
+}
+
+/* Main board frame */
+QFrame#boardFrame {
+    background-color: #ffffff;
+    border: 4px solid #68c7ff;
+    border-radius: 10px;
+}
+
+/* Default grid buttons */
+QPushButton[cell="true"] {
+    background-color: #ffffff;
+    border: 3px solid #ababab;
+}
+
+/* Top-left corner */
+QPushButton[cell="true"][corner="top-left"] {
+    border-top-left-radius: 6px;
+}
+
+/* Top-right corner */
+QPushButton[cell="true"][corner="top-right"] {
+    border-top-right-radius: 6px;
+}
+
+/* Bottom-left corner */
+QPushButton[cell="true"][corner="bottom-left"] {
+    border-bottom-left-radius: 6px;
+}
+
+/* Bottom-right corner */
+QPushButton[cell="true"][corner="bottom-right"] {
+    border-bottom-right-radius: 6px;
+}
+
+/* Hover / pressed styles */
+QPushButton[cell="true"]:hover {
+    background-color: #d5dbdb;
+}
+QPushButton[cell="true"]:pressed {
+    background-color: #bdc3c7;
+}
+
+/* Control buttons */
+QPushButton#restartButton {
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #388E3C;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton#restartButton:hover {
+    background-color: #66BB6A;
+}
+
+QPushButton#restartButton:pressed {
+    background-color: #2E7D32;
+}
+
+QPushButton#quitButton {
+    background-color: #F44336;
+    color: white;
+    border: 2px solid #C62828;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton#quitButton:hover {
+    background-color: #EF5350;
+}
+
+QPushButton#quitButton:pressed {
+    background-color: #B71C1C;
+}
+
+
