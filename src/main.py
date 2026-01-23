@@ -1,16 +1,17 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from ui.main_window import create_main_window
+from game.main_window import MainWindow
 
 def main():
     app = QApplication(sys.argv)
     
     # Load and apply stylesheet
-    with open('src/ui/styles.qss', 'r') as f:
+    with open('src/styling/styles.qss', 'r') as f:
         app.setStyleSheet(f.read())
     
-    window = create_main_window()
+    window = MainWindow()
     window.show()
+
     sys.exit(app.exec())
 
 if __name__ == '__main__':
