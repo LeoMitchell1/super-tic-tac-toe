@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QFrame, QGridLayout, QSizePolicy
 from PyQt6.QtCore import pyqtSignal
 from .board_square import BoardSquare
 from .grid_overlay import GridOverlay
+from .winner_overlay import WinnerOverlay
 
 class MiniGame(QFrame):
     square_clicked = pyqtSignal(object, int, int)
@@ -14,7 +15,9 @@ class MiniGame(QFrame):
         self.winner = None  # 'X', 'O', or None
         self.is_full = False
         self.grid = None
+        self.winner_overlay = None
         self.squares = [[None for _ in range(3)] for _ in range(3)]
+        self.playable = True  # Whether this mini-game can be played in
 
         self.setMinimumSize(150, 150)
         self.setSizePolicy(
@@ -66,5 +69,75 @@ class MiniGame(QFrame):
         
     def resizeEvent(self, event):
         self.overlay.setGeometry(self.rect())
+
+        if self.winner_overlay:
+            self.winner_overlay.setGeometry(self.rect())
+
         super().resizeEvent(event)
+
+    def check_winner(self):
+        # Check rows and columns
+        for i in range(3):
+            if (self.squares[i][0].state == self.squares[i][1].state ==
+                self.squares[i][2].state) and self.squares[i][0].state is not None:
+                self.winner = self.squares[i][0].state
+                self.display_winner()
+                return self.winner
+            if (self.squares[0][i].state == self.squares[1][i].state ==
+                self.squares[2][i].state) and self.squares[0][i].state is not None:
+                self.winner = self.squares[0][i].state
+                self.display_winner()
+                return self.winner
+
+        # Check diagonals
+        if (self.squares[0][0].state == self.squares[1][1].state ==
+            self.squares[2][2].state) and self.squares[0][0].state is not None:
+            self.winner = self.squares[0][0].state
+            self.display_winner()
+            
+
+        if (self.squares[0][2].state == self.squares[1][1].state ==
+            self.squares[2][0].state) and self.squares[0][2].state is not None:
+            self.winner = self.squares[0][2].state
+            self.display_winner()
+            
+
+        # Check for draw
+        if all(self.squares[r][c].state is not None for r in range(3) for c in range(3)):
+            self.is_full = True
+
+        return None
+    
+    def display_winner(self):
+        if self.winner is not None:
+            self.winner_overlay = WinnerOverlay(self)
+            self.winner_overlay.setGeometry(self.rect())
+            self.winner_overlay.show()
+
+    def set_playable_squares(self):
+        for r in range(3):
+            for c in range(3):
+                self.squares[r][c].playable = self.playable
+
+    def reset(self):
+        self.winner = None
+        self.is_full = False
+        self.playable = True
+
+        if self.winner_overlay:
+            self.winner_overlay.hide()
+            self.winner_overlay.setParent(None)
+            self.winner_overlay = None
+
+        for r in range(3):
+            for c in range(3):
+                self.squares[r][c].set_state(None)
+                self.squares[r][c].playable = True
+                self.squares[r][c].update_background()  # reset background
+            
+
+
+
+        
+
 

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
-
+from styling.colours import GRID
 
 class GridOverlay(QFrame):
     def __init__(self, parent=None):
@@ -10,7 +10,7 @@ class GridOverlay(QFrame):
         self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_LayoutUsesWidgetRect)
-        self.grid_colour = "#b4b4b4"
+        self.grid_colour = GRID
 
     def paintEvent(self, event):
         painter = QPainter(self)

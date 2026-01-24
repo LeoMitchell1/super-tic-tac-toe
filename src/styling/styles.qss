@@ -6,12 +6,13 @@ QMainWindow {
 /* Main board frame */
 QFrame#boardFrame {
     background-color: #ffffff;
-    border: 5px solid #fd6767;
+    border: 4px solid #ed4a4a;
     border-radius: 10px;
 }
 
 QFrame {
-    border: 4px solid #b4b4b4;
+    background-color: #ffffff;
+    border: 4px solid #2F2F2F;
     border-radius: 8px;
 }
 
@@ -35,18 +36,14 @@ QPushButton[cell="true"][corner="bottom-right"] {
     border-bottom-right-radius: 4px;
 }
 
-/* Hover / pressed */
-QPushButton[cell="true"]:hover {
-    background-color: #d5dbdb;
-}
 QPushButton[cell="true"]:pressed {
-    background-color: #bdc3c7;
+    background-color: #ffffff;
 }
 
 /* Control buttons */
 QPushButton#restartButton {
     background-color: #69c8ff;
-    color: white;
+    color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
     font-size: 14px;
@@ -54,7 +51,7 @@ QPushButton#restartButton {
 }
 
 QPushButton#restartButton:hover {
-    background-color: #19abff;
+    background-color: #557ef9;
 }
 
 QPushButton#restartButton:pressed {
@@ -62,8 +59,8 @@ QPushButton#restartButton:pressed {
 }
 
 QPushButton#quitButton {
-    background-color: #F44336;
-    color: white;
+    background-color: #ed4a4a;
+    color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
     font-size: 14px;
@@ -71,9 +68,144 @@ QPushButton#quitButton {
 }
 
 QPushButton#quitButton:hover {
-    background-color: #B71C1C;
+    background-color: #ff4343;
 }
 
 QPushButton#quitButton:pressed {
-    background-color: #B71C1C;
+    background-color: #981e1e;
+}
+
+/* Game result popup */
+#GameResultContainer {
+    background-color: #ffffff;
+    border: 2px solid #3e3e3e;
+    border-radius: 20px;
+    padding: 30px 50px;
+}
+
+/* Result text */
+#GameResultLabel {
+    border: none;
+    color: #202020;
+    font-size: 24px;
+    font-weight: bold;
+    qproperty-alignment: 'AlignCenter';
+}
+
+/* Restart button in popup */
+#GameResultButton {
+    background-color: #fa6161;
+    color: #202020;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+#GameResultButton:hover {
+    background-color: #ff4343;
+}
+
+/* Window background */
+QWidget {
+    background-color: #ffffff;
+    color: #202020;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title label */
+#MenuTitle {
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* GroupBoxes */
+#MenuGroup,
+#MenuInstructions {
+    border: 1px solid #555555;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* Instructions text */
+#MenuInstructionsText {
+    color: #dddddd;
+    font-size: 16px;
+}
+
+/* Modern ComboBoxes */
+QComboBox#MenuComboBox {
+    background-color: #ffffff;
+    border: 2px solid #2F2F2F;
+    border-radius: 10px;
+    padding: 6px 36px 6px 12px;
+    min-height: 36px;
+    font-size: 14px;
+    color: #202020;
+}
+
+/* Hover + focus */
+QComboBox#MenuComboBox:hover {
+    border-color: #3e3e3e;
+}
+
+QComboBox#MenuComboBox:focus {
+    border-color: #fa6161;
+}
+
+/* Dropdown button area */
+QComboBox#MenuComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: none;
+}
+
+/* Custom arrow */
+QComboBox#MenuComboBox::down-arrow {
+    border-left: 2px solid #202020;
+    border-bottom: 2px solid #202020;
+    width: 8px;
+    height: 8px;
+    margin-top: 4px;
+}
+
+/* Dropdown list */
+QComboBox#MenuComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 2px solid #2F2F2F;
+    border-radius: 10px;
+    selection-background-color: #fa6161;
+    selection-color: #ffffff;
+    padding: 6px;
+    outline: none;
+}
+
+/* Items */
+QComboBox#MenuComboBox QAbstractItemView::item {
+    height: 32px;
+    padding-left: 10px;
+}
+
+/* Hover item */
+QComboBox#MenuComboBox QAbstractItemView::item:hover {
+    background-color: #ff4343;
+    color: #ffffff;
+}
+
+/* Start button */
+#MenuButton {
+    background-color: #fa6161;
+    color: #202020;
+    border-radius: 12px;
+    font-size: 18px;
+}
+#MenuButton:hover {
+    background-color: #ff4343;
+}
+#MenuButton:pressed {
+    background-color: #981e1e;
 }

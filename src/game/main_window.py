@@ -1,13 +1,13 @@
-from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
-)
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 from .board import Board
 
-
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, mode="Player vs Player", difficulty=None):
         super().__init__()
+
+        self.mode = mode
+        self.difficulty = difficulty
 
         self.setWindowTitle("Super Tic Tac Toe")
         self.setFixedSize(700, 750)
@@ -39,3 +39,6 @@ class MainWindow(QMainWindow):
         controls.addStretch()
 
         layout.addLayout(controls)
+
+        # (Optional debug)
+        print(f"Game mode: {self.mode}, difficulty: {self.difficulty}")

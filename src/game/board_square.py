@@ -1,20 +1,25 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt, pyqtSignal
+from styling.colours import RED, BLUE, BACKGROUND, HOVER
 
 class BoardSquare(QPushButton):
     hovered = pyqtSignal(bool)
 
     def __init__(self, row, col, parent=None):
         super().__init__(parent) # Initialize as a QPushButton
-        
-        self.state = None  # Can be 'X', 'O', or None
-        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        self.setProperty('cell', 'true')
+        self.state = None
         self.row = row
         self.col = col
-
-        self.setMouseTracking(True)  # Enable mouse tracking for hover events
+        self.playable = False
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setProperty('cell', 'true')
+        self.setMouseTracking(True)
+        self.setStyleSheet("""
+            QPushButton:hover {
+                /* remove default hover effect */
+            }
+        """)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -57,7 +62,6 @@ class BoardSquare(QPushButton):
                 int(radius * 2), int(radius * 2)
             )
 
-
     def set_state(self, state):
         if state in ('X', 'O', None):
             self.state = state
@@ -65,18 +69,21 @@ class BoardSquare(QPushButton):
             self.update()  # trigger repaint
 
     def update_background(self):
-        """Set the button's background color depending on its state."""
         if self.state == 'X':
-            self.setStyleSheet("background-color: #ff4d4d")  # red for X
+            self.setStyleSheet(f"background-color: {RED}")  # red for X
         elif self.state == 'O':
-            self.setStyleSheet("background-color: #4d79ff")  # blue for O
+            self.setStyleSheet(f"background-color: {BLUE}")  # blue for O
         else:
-            self.setStyleSheet("background-color: #ffffff")  # default white
+            self.setStyleSheet(f"background-color: {BACKGROUND}")  # default
 
     def enterEvent(self, event):
-        self.hovered.emit(True)
+        if self.playable and self.state is None:  # only hover if square is playable
+            self.setStyleSheet(f"background-color: {HOVER}")
+            self.hovered.emit(True)
         super().enterEvent(event)
 
     def leaveEvent(self, event):
-        self.hovered.emit(False)
+        if self.playable:
+            self.update_background()  # revert to original background
+            self.hovered.emit(False)
         super().leaveEvent(event)
