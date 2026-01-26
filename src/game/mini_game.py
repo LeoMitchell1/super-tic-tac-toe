@@ -76,6 +76,10 @@ class MiniGame(QFrame):
         super().resizeEvent(event)
 
     def check_winner(self):
+        # Don't re-check if there's already a winner
+        if self.winner is not None:
+            return self.winner
+        
         # Check rows and columns
         for i in range(3):
             if (self.squares[i][0].state == self.squares[i][1].state ==
@@ -94,13 +98,13 @@ class MiniGame(QFrame):
             self.squares[2][2].state) and self.squares[0][0].state is not None:
             self.winner = self.squares[0][0].state
             self.display_winner()
-            
+            return self.winner
 
         if (self.squares[0][2].state == self.squares[1][1].state ==
             self.squares[2][0].state) and self.squares[0][2].state is not None:
             self.winner = self.squares[0][2].state
             self.display_winner()
-            
+            return self.winner
 
         # Check for draw
         if all(self.squares[r][c].state is not None for r in range(3) for c in range(3)):
@@ -125,8 +129,7 @@ class MiniGame(QFrame):
         self.playable = True
 
         if self.winner_overlay:
-            self.winner_overlay.hide()
-            self.winner_overlay.setParent(None)
+            self.winner_overlay.deleteLater()
             self.winner_overlay = None
 
         for r in range(3):
@@ -134,6 +137,11 @@ class MiniGame(QFrame):
                 self.squares[r][c].set_state(None)
                 self.squares[r][c].playable = True
                 self.squares[r][c].update_background()  # reset background
+
+    def refresh_hovers(self):
+        for r in range(3):
+            for c in range(3):
+                self.squares[r][c].update_background()
             
 
 

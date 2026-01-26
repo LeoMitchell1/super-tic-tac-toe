@@ -58,6 +58,23 @@ QPushButton#restartButton:pressed {
     background-color: #19abff;
 }
 
+QPushButton#backButton {
+    background-color: #ed4a4a;
+    color: #202020;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton#backButton:hover {
+    background-color: #ab3030;
+}
+
+QPushButton#backButton:pressed {
+    background-color: #981e1e;
+}
+
 QPushButton#quitButton {
     background-color: #ed4a4a;
     color: #202020;
@@ -68,7 +85,7 @@ QPushButton#quitButton {
 }
 
 QPushButton#quitButton:hover {
-    background-color: #ff4343;
+    background-color: #ab3030;
 }
 
 QPushButton#quitButton:pressed {
@@ -76,15 +93,14 @@ QPushButton#quitButton:pressed {
 }
 
 /* Game result popup */
-#GameResultContainer {
+#gameResultContainer {
     background-color: #ffffff;
-    border: 2px solid #3e3e3e;
     border-radius: 20px;
     padding: 30px 50px;
 }
 
 /* Result text */
-#GameResultLabel {
+#gameResultLabel {
     border: none;
     color: #202020;
     font-size: 24px;
@@ -93,8 +109,7 @@ QPushButton#quitButton:pressed {
 }
 
 /* Restart button in popup */
-#GameResultButton {
-    background-color: #fa6161;
+#gameResultButton {
     color: #202020;
     border: none;
     padding: 10px 20px;
@@ -102,7 +117,7 @@ QPushButton#quitButton:pressed {
     font-size: 16px;
     font-weight: bold;
 }
-#GameResultButton:hover {
+#gameResultButton:hover {
     background-color: #ff4343;
 }
 
@@ -113,17 +128,9 @@ QWidget {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Title label */
-#MenuTitle {
-    border: none;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 /* GroupBoxes */
-#MenuGroup,
-#MenuInstructions {
+#menuGroup,
+#menuInstructions {
     border: 1px solid #555555;
     border-radius: 12px;
     padding: 10px;
@@ -131,15 +138,15 @@ QWidget {
 }
 
 /* Instructions text */
-#MenuInstructionsText {
+#menuInstructionsText {
     color: #dddddd;
     font-size: 16px;
 }
 
 /* Modern ComboBoxes */
-QComboBox#MenuComboBox {
+QComboBox#menuComboBox {
     background-color: #ffffff;
-    border: 2px solid #2F2F2F;
+    border: 3px solid #2F2F2F;
     border-radius: 10px;
     padding: 6px 36px 6px 12px;
     min-height: 36px;
@@ -148,64 +155,210 @@ QComboBox#MenuComboBox {
 }
 
 /* Hover + focus */
-QComboBox#MenuComboBox:hover {
+QComboBox#menuComboBox:hover {
     border-color: #3e3e3e;
 }
 
-QComboBox#MenuComboBox:focus {
+QComboBox#menuComboBox:focus {
     border-color: #fa6161;
 }
 
 /* Dropdown button area */
-QComboBox#MenuComboBox::drop-down {
+QComboBox#menuComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
     width: 30px;
     border-left: none;
 }
 
-/* Custom arrow */
-QComboBox#MenuComboBox::down-arrow {
-    border-left: 2px solid #202020;
-    border-bottom: 2px solid #202020;
-    width: 8px;
-    height: 8px;
-    margin-top: 4px;
-}
-
 /* Dropdown list */
-QComboBox#MenuComboBox QAbstractItemView {
+QComboBox#menuComboBox QAbstractItemView {
     background-color: #ffffff;
     border: 2px solid #2F2F2F;
     border-radius: 10px;
-    selection-background-color: #fa6161;
-    selection-color: #ffffff;
+    selection-background-color: #222222;
+    selection-color: #000000;
     padding: 6px;
     outline: none;
 }
 
 /* Items */
-QComboBox#MenuComboBox QAbstractItemView::item {
+QComboBox#menuComboBox QAbstractItemView::item {
     height: 32px;
     padding-left: 10px;
 }
 
 /* Hover item */
-QComboBox#MenuComboBox QAbstractItemView::item:hover {
-    background-color: #ff4343;
-    color: #ffffff;
+QComboBox#menuComboBox QAbstractItemView::item:hover {
+    background-color: #e4e4e4;
+    color: black;
 }
 
 /* Start button */
-#MenuButton {
-    background-color: #fa6161;
+#menuButton {
+    background-color: #69c8ff;
     color: #202020;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#menuButton:hover {
+    background-color: #557ef9;
+}
+
+#menuButton:pressed {
+    background-color: #19abff;
+}
+
+/* Instructions button */
+#instructionsButton {
+    background-color: #ffb347;
+    color: #202020;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#instructionsButton:hover {
+    background-color: #ff9c1a;
+}
+
+#instructionsButton:pressed {
+    background-color: #ff8000;
+}
+
+/* Back button in instructions */
+#instructionsBackButton {
+    background-color: #ed4a4a;
+    color: #202020;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#instructionsBackButton:hover {
+    background-color: #ab3030;
+}
+
+/* Title label - updated */
+#menuTitle {
+    border: none;
+    background-color: transparent;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+
+/* Instruction cards */
+#instructionCard {
+    background-color: #f8f8f8;
+    border: 2px solid #e0e0e0;
     border-radius: 12px;
+    padding: 10px;
+}
+
+#instructionCardTitle {
     font-size: 18px;
+    font-weight: bold;
+    color: #202020;
+    border: none;
+    background: transparent;
 }
-#MenuButton:hover {
-    background-color: #ff4343;
+
+#instructionCardBody {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #404040;
+    border: none;
+    background: transparent;
 }
-#MenuButton:pressed {
-    background-color: #981e1e;
+
+#instructionImagePlaceholder {
+    border: 2px dashed #bbbbbb;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #999999;
+    background-color: #fafafa;
+}
+
+/* Modern Scroll Area */
+QScrollArea#modernScrollArea {
+    background-color: #ffffff;
+    border: none;
+}
+
+/* Scroll content background */
+#scrollContent {
+    background-color: #ffffff;
+}
+
+/* Modern vertical scrollbar */
+QScrollArea#modernScrollArea QScrollBar:vertical {
+    background-color: #f5f5f5;
+    width: 12px;
+    margin: 0px;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Scrollbar handle */
+QScrollArea#modernScrollArea QScrollBar::handle:vertical {
+    background-color: #c0c0c0;
+    border-radius: 6px;
+    min-height: 30px;
+    margin: 2px;
+}
+
+/* Scrollbar handle on hover */
+QScrollArea#modernScrollArea QScrollBar::handle:vertical:hover {
+    background-color: #a0a0a0;
+}
+
+/* Scrollbar handle when pressed */
+QScrollArea#modernScrollArea QScrollBar::handle:vertical:pressed {
+    background-color: #808080;
+}
+
+/* Remove scrollbar arrows */
+QScrollArea#modernScrollArea QScrollBar::add-line:vertical,
+QScrollArea#modernScrollArea QScrollBar::sub-line:vertical {
+    height: 0px;
+    border: none;
+    background: none;
+}
+
+/* Remove scrollbar page buttons */
+QScrollArea#modernScrollArea QScrollBar::add-page:vertical,
+QScrollArea#modernScrollArea QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* Horizontal scrollbar (hidden but styled for consistency) */
+QScrollArea#modernScrollArea QScrollBar:horizontal {
+    background-color: #f5f5f5;
+    height: 12px;
+    margin: 0px;
+    border: none;
+    border-radius: 6px;
+}
+
+QScrollArea#modernScrollArea QScrollBar::handle:horizontal {
+    background-color: #c0c0c0;
+    border-radius: 6px;
+    min-width: 30px;
+    margin: 2px;
+}
+
+QScrollArea#modernScrollArea QScrollBar::handle:horizontal:hover {
+    background-color: #a0a0a0;
+}
+
+QScrollArea#modernScrollArea QScrollBar::handle:horizontal:pressed {
+    background-color: #808080;
 }
