@@ -92,6 +92,77 @@ QPushButton#quitButton:pressed {
     background-color: #981e1e;
 }
 
+/* ========== TIMER CONTAINER ========== */
+QFrame#timerContainer {
+    border: 3px solid #2F2F2F;
+    border-radius: 16px;
+    padding: 10px;
+    min-width: 200px;
+}
+
+/* ========== TIMER LABEL ========== */
+QLabel#timerLabel {
+    font-size: 48px;
+    font-weight: bold;
+    border: none;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 2px;
+}
+
+/* Timer states for Player X */
+QLabel#timerLabel[state="x"] {
+    color: #ed4a4a;
+}
+
+/* Timer states for Player O */
+QLabel#timerLabel[state="o"] {
+    color: #5da7ff;
+}
+
+/* Warning state (2 seconds or less) */
+QLabel#timerLabel[state="warning"] {
+    color: #ff4343;
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+/* AI turn state */
+QLabel#timerLabel[state="ai"] {
+    color: #999999;
+    font-size: 36px;
+}
+
+/* ========== TIMER SUBTITLE ========== */
+QLabel#timerSubtitle {
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    padding: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Subtitle states for Player X */
+QLabel#timerSubtitle[state="x"] {
+    color: #ed4a4a;
+}
+
+/* Subtitle states for Player O */
+QLabel#timerSubtitle[state="o"] {
+    color: #5da7ff;
+}
+
+/* Warning state */
+QLabel#timerSubtitle[state="warning"] {
+    color: #ff4343;
+}
+
+/* AI turn state */
+QLabel#timerSubtitle[state="ai"] {
+    color: #666666;
+}
+
 /* Game result popup */
 #gameResultContainer {
     background-color: #ffffff;
@@ -105,7 +176,6 @@ QPushButton#quitButton:pressed {
     color: #202020;
     font-size: 24px;
     font-weight: bold;
-    qproperty-alignment: 'AlignCenter';
 }
 
 /* Restart button in popup */
@@ -205,16 +275,16 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
 }
 
 #menuButton:hover {
-    background-color: #557ef9;
+    background-color: #469fd2;
 }
 
 #menuButton:pressed {
-    background-color: #19abff;
+    background-color: #2c83b6;
 }
 
 /* Instructions button */
 #instructionsButton {
-    background-color: #ffb347;
+    background-color: #46c16b;
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
@@ -223,11 +293,28 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
 }
 
 #instructionsButton:hover {
-    background-color: #ff9c1a;
+    background-color: #30944e;
 }
 
 #instructionsButton:pressed {
-    background-color: #ff8000;
+    background-color: #24723c;
+}
+
+#leaderboardButton {
+    background-color: #ffc561;
+    color: #202020;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#leaderboardButton:hover {
+    background-color: #c5923a;
+}
+
+#leaderboardButton:pressed {
+    background-color: #8e6128;
 }
 
 /* Back button in instructions */
@@ -361,4 +448,154 @@ QScrollArea#modernScrollArea QScrollBar::handle:horizontal:hover {
 
 QScrollArea#modernScrollArea QScrollBar::handle:horizontal:pressed {
     background-color: #808080;
+}
+
+#gameScoreLabel {
+    border: none;
+    color: #202020;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+QWidget {
+    background-color: #ffffff;
+    color: #202020;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+QLabel#title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #202020;
+    padding: 20px 20px 10px 20px;
+    background: transparent;
+    border: none;
+    letter-spacing: 2px;
+}
+
+QLabel#subtitle {
+    font-size: 15px;
+    color: #666666;
+    background: transparent;
+    border: none;
+    padding-bottom: 10px;
+}
+
+QFrame#titleContainer {
+    background-color: #ffffff;
+    border: none;
+    margin-bottom: 20px;
+}
+
+QTableWidget {
+    background-color: #ffffff;
+    border: 3px solid #2F2F2F;
+    border-radius: 12px;
+    gridline-color: #f0f0f0;
+    selection-background-color: transparent;
+    padding: 0px;
+    outline: none;
+}
+
+QTableWidget::item {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #ffffff;
+}
+
+QTableWidget::item:selected {
+    background-color: transparent;
+    color: #202020;
+}
+
+/* Remove item focus outline */
+QTableWidget::item:focus {
+    outline: none;
+    border: none;
+}
+
+QHeaderView::section {
+    background-color: #f8c64a;
+    color: #ffffff;
+    padding: 16px 12px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+QHeaderView::section:first {
+    border-top-left-radius: 8px;
+}
+
+QHeaderView::section:last {
+    border-right: none;
+    border-top-right-radius: 8px;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #f5f5f5;
+    width: 12px;
+    border-radius: 6px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+    background: #c0c0c0;
+    border-radius: 6px;
+    min-height: 30px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #a0a0a0;
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #808080;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QPushButton#refreshButton {
+    background-color: #69c8ff;
+    color: #202020;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+QPushButton#refreshButton:hover {
+    background-color: #557ef9;
+}
+
+QPushButton#refreshButton:pressed {
+    background-color: #19abff;
+}
+
+QPushButton#closeButton {
+    background-color: #ed4a4a;
+    color: #202020;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+QPushButton#closeButton:hover {
+    background-color: #ab3030;
+}
+
+QPushButton#closeButton:pressed {
+    background-color: #981e1e;
 }

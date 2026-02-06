@@ -1,11 +1,15 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QFrame, QSizePolicy
-from PyQt6.QtCore import QSize, QTimer
+from PyQt6.QtCore import QSize, QTimer, pyqtSignal
 from .mini_game import MiniGame
-from .game_result import GameResultDialog
+from ..ui.game_result import GameResultDialog
 from styling.colours import RED, BLUE, HIGHLIGHT, GRID
 import random
+import time
 
 class Board(QWidget):
+    turn_changed = pyqtSignal()  # Signal emitted when turn changes
+    game_over = pyqtSignal()  # Signal emitted when game ends
+    
     def __init__(self, difficulty=None, parent=None):
         super().__init__(parent)
         
@@ -14,6 +18,10 @@ class Board(QWidget):
         self.difficulty = difficulty  # None, "Easy", "Medium", or "Hard"
         self.ai_player = "O"  # AI always plays as O
         self.human_player = "X"  # Human always plays as X
+        self.score = 0
+        self.start_time = None  # Track when first move is made
+        self.time_taken = 0  # Time taken to complete the game
+        self.time_cap = 240  # 4 minutes time cap for scoring
         
         outer_layout = QGridLayout(self)
         outer_layout.setContentsMargins(0, 0, 0, 0)
@@ -71,7 +79,10 @@ class Board(QWidget):
         self.make_move(square, mini_game_row, mini_game_col)
 
     def make_move(self, square, mini_game_row, mini_game_col):
-        """Execute a move for either human or AI"""
+        # Start timing on the first move
+        if self.start_time is None:
+            self.start_time = time.time()
+        
         clicked_mini_game = self.mini_games[mini_game_row][mini_game_col]
         
         # Place the mark
@@ -107,6 +118,9 @@ class Board(QWidget):
         else:
             self.update_board_colour(BLUE)  # blue for O
 
+        # Emit signal that turn has changed
+        self.turn_changed.emit()
+
         # Check for winner before AI move
         if self.check_overall_winner():
             return
@@ -116,7 +130,6 @@ class Board(QWidget):
             QTimer.singleShot(500, self.ai_make_move)  # 500ms delay for better UX
 
     def ai_make_move(self):
-        """AI makes a move based on difficulty level"""
         if self.difficulty == "Easy":
             move = self.get_random_move()
         elif self.difficulty == "Medium":
@@ -132,8 +145,9 @@ class Board(QWidget):
             square = mini_game.squares[square_row][square_col]
             self.make_move(square, mini_game_row, mini_game_col)
 
+        
+
     def get_available_moves(self):
-        """Get all available moves"""
         moves = []
         
         if self.active_mini_game is not None:
@@ -159,12 +173,10 @@ class Board(QWidget):
         return moves
 
     def get_random_move(self):
-        """Easy AI - random valid move"""
         moves = self.get_available_moves()
         return random.choice(moves) if moves else None
 
     def get_medium_move(self):
-        """Medium AI - tries to win mini-games, otherwise random"""
         moves = self.get_available_moves()
         if not moves:
             return None
@@ -207,7 +219,6 @@ class Board(QWidget):
         return random.choice(moves)
 
     def get_hard_move(self):
-        """Hard AI - strategic play with board-level thinking"""
         moves = self.get_available_moves()
         if not moves:
             return None
@@ -270,7 +281,6 @@ class Board(QWidget):
         return self.get_medium_move()
     
     def check_mini_game_win(self, mini_game, player):
-        """Check if a player has won a mini-game without modifying it"""
         squares = mini_game.squares
         
         # Check rows
@@ -301,7 +311,6 @@ class Board(QWidget):
         return False
 
     def would_win_game(self, player):
-        """Check if a player would win the overall game"""
         # Check rows
         for i in range(3):
             if (self.mini_games[i][0].winner == player and
@@ -367,13 +376,10 @@ class Board(QWidget):
 
                 mini_game.refresh_hovers()
 
-        
-
     def update_board_colour(self, colour):
         self.setStyleSheet(f"border-color: {colour};")
 
     def check_overall_winner(self):
-        """Returns True if game is over, False otherwise"""
         winner = None
         
         # Check rows and columns
@@ -403,6 +409,7 @@ class Board(QWidget):
                 winner = "Draw"
 
         if winner:
+            self.game_over.emit()  # Emit signal to stop timer
             self.display_winner(winner)
             return True
         
@@ -418,13 +425,32 @@ class Board(QWidget):
 
         self.update_board_colour(winner == 'X' and RED or winner == 'O' and BLUE or GRID)
 
+        # Calculate time taken (in seconds)
+        if self.start_time is not None:
+            self.time_taken = time.time() - self.start_time
+        else:
+            self.time_taken = 0
+
+        time_bonus = max(0, self.time_cap - int(self.time_taken)) 
+
+        if winner == "X":
+            if self.difficulty == "Hard":
+                self.score = 1000 + time_bonus
+            elif self.difficulty == "Medium":
+                self.score = 600 + time_bonus
+            else:
+                self.score = 300 + time_bonus
+
         # Show modern pop-up
-        dialog = GameResultDialog(winner, parent=self)
+        dialog = GameResultDialog(winner, self.score, parent=self)
         dialog.exec()
 
     def reset_game(self):
         self.current_player = "X"
         self.active_mini_game = None
+        self.start_time = None  # Reset timer
+        self.time_taken = 0
+        self.score = 0
 
         for r in range(3):
             for c in range(3):
@@ -438,6 +464,9 @@ class Board(QWidget):
         self.update_board_colour(RED)
         self.update_mini_game_highlights()
         self.update_playable_mini_games()
+        
+        # Emit signal to restart timer
+        self.turn_changed.emit()
                 
     def sizeHint(self):
         return QSize(600, 600)

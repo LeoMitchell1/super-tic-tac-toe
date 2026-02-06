@@ -7,7 +7,7 @@ class BoardSquare(QPushButton):
     hovered = pyqtSignal(bool)
 
     def __init__(self, row, col, parent=None):
-        super().__init__(parent) # Initialize as a QPushButton
+        super().__init__(parent)
         self.state = None
         self.row = row
         self.col = col

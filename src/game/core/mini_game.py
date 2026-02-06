@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QFrame, QGridLayout, QSizePolicy
 from PyQt6.QtCore import pyqtSignal
 from .board_square import BoardSquare
-from .grid_overlay import GridOverlay
-from .winner_overlay import WinnerOverlay
+from ..ui.grid_overlay import GridOverlay
+from ..ui.winner_overlay import WinnerOverlay
 
 class MiniGame(QFrame):
     square_clicked = pyqtSignal(object, int, int)

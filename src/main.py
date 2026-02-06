@@ -1,7 +1,8 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from game.menu_window import MenuWindow
+from game.ui.menu_window import MenuWindow
 from styling.colours import *
+from game.data import database
 
 def main():
     app = QApplication(sys.argv)
@@ -9,6 +10,8 @@ def main():
     # Load and apply stylesheet
     with open("src/styling/styles.qss", "r") as f:
         app.setStyleSheet(f.read())
+
+    database.initialize_database()
 
     menu = MenuWindow()
     menu.show()

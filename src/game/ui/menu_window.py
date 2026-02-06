@@ -36,7 +36,7 @@ class MenuWindow(QWidget):
         self.mode_selector = QComboBox()
         self.mode_selector.setObjectName("menuComboBox")
         self.mode_selector.setFixedWidth(200)
-        self.mode_selector.addItems(["Player vs Player", "Player vs AI"])
+        self.mode_selector.addItems(["Player vs AI", "Player vs Player"])
         layout.addWidget(self.mode_selector, alignment=Qt.AlignmentFlag.AlignCenter)
         
         self.difficulty_selector = QComboBox()
@@ -56,6 +56,12 @@ class MenuWindow(QWidget):
         instructions_btn.setFixedWidth(200)
         instructions_btn.clicked.connect(self.show_instructions_window)
         layout.addWidget(instructions_btn, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        leaderboard_btn = QPushButton("Leaderboard")
+        leaderboard_btn.setObjectName("leaderboardButton")
+        leaderboard_btn.setFixedWidth(200)
+        leaderboard_btn.clicked.connect(self.show_leaderboard_window)
+        layout.addWidget(leaderboard_btn, alignment=Qt.AlignmentFlag.AlignCenter)
         
         quit_btn = QPushButton("Quit")
         quit_btn.setObjectName("quitButton")
@@ -73,4 +79,10 @@ class MenuWindow(QWidget):
     def show_instructions_window(self):
         self.instructions_win = InstructionsWindow()
         self.instructions_win.show()
+        self.close()
+
+    def show_leaderboard_window(self):
+        from .leaderboard_window import LeaderboardWindow
+        self.leaderboard_win = LeaderboardWindow()
+        self.leaderboard_win.show()
         self.close()
