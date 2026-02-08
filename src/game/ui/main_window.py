@@ -3,8 +3,9 @@ from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from ..core.board import Board
 
 class MainWindow(QMainWindow):
-    def __init__(self, mode="Player vs Player", difficulty=None):
+    def __init__(self, mode, difficulty, username=None):
         super().__init__()
+        self.username = username        
         self.mode = mode
         self.difficulty = difficulty
         self.setWindowTitle("Super Tic Tac Toe")
