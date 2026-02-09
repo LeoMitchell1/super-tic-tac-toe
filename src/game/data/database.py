@@ -21,14 +21,14 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-def add_score(player_name, score):
+def add_score(username, score):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute('''
         INSERT INTO leaderboard (player_name, score)
         VALUES (?, ?)
-    ''', (player_name, score))
+    ''', (username, score))
 
     conn.commit()
     conn.close()
@@ -48,6 +48,19 @@ def get_leaderboard():
     conn.close()
     return results
 
+def get_usernames() -> set[str]:
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT player_name
+        FROM leaderboard
+    """)
+
+    usernames = {row[0] for row in cursor.fetchall()}
+    conn.close()
+    return usernames
+
 def clear_leaderboard():
     conn = get_connection()
     cursor = conn.cursor()
@@ -56,3 +69,4 @@ def clear_leaderboard():
 
     conn.commit()
     conn.close()
+

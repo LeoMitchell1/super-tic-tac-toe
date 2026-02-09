@@ -78,6 +78,8 @@ class LeaderboardWindow(QWidget):
         back_button.setObjectName("backButton")
         back_button.clicked.connect(self.back_to_menu)
         back_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        back_button.setMinimumHeight(50)
+        back_button.setMinimumWidth(100)
         button_layout.addWidget(back_button)
         
         main_layout.addSpacing(20)

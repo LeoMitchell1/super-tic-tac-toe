@@ -10,7 +10,7 @@ class Board(QWidget):
     turn_changed = pyqtSignal()  # Signal emitted when turn changes
     game_over = pyqtSignal()  # Signal emitted when game ends
     
-    def __init__(self, difficulty=None, parent=None):
+    def __init__(self, difficulty=None, parent=None, username=None):
         super().__init__(parent)
         
         self.current_player = "X"
@@ -18,6 +18,7 @@ class Board(QWidget):
         self.difficulty = difficulty  # None, "Easy", "Medium", or "Hard"
         self.ai_player = "O"  # AI always plays as O
         self.human_player = "X"  # Human always plays as X
+        self.username = username
         self.score = 0
         self.start_time = None  # Track when first move is made
         self.time_taken = 0  # Time taken to complete the game
@@ -442,7 +443,7 @@ class Board(QWidget):
                 self.score = 300 + time_bonus
 
         # Show modern pop-up
-        dialog = GameResultDialog(winner, self.score, parent=self)
+        dialog = GameResultDialog(winner, self.score, parent=self, username=self.username)
         dialog.exec()
 
     def reset_game(self):

@@ -80,7 +80,7 @@ QPushButton#quitButton {
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -270,7 +270,7 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -288,7 +288,7 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -305,7 +305,7 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -323,7 +323,7 @@ QComboBox#menuComboBox QAbstractItemView::item:hover {
     color: #202020;
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
 }
 

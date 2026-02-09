@@ -14,7 +14,7 @@ def main():
     database.initialize_database()
 
     menu = MenuWindow()
-    menu.show()
+    menu.showFullScreen()
 
     sys.exit(app.exec())
 

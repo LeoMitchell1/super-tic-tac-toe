@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from game.data.database import add_score
 
 class GameResultDialog(QDialog):
-    def __init__(self, winner, score, name=None, parent=None):
+    def __init__(self, winner, score, username=None, parent=None):
         super().__init__(parent)
         colour = "#ed4a4a" if winner == "X" else "#557ef9" if winner == "O" else "#9E9E9E"
         
@@ -38,7 +38,7 @@ class GameResultDialog(QDialog):
         
         if score > 0:
             # Score label
-            add_score("Player", score)  # Assuming single player for simplicity
+            add_score(username, score)  # Assuming single player for simplicity
             score_label = QLabel(f"Score: {score}")
             score_label.setObjectName("gameScoreLabel")
             score_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
