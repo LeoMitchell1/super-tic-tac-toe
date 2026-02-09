@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QComboBox
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QComboBox, QInputDialog, QMessageBox
 from PyQt6.QtCore import Qt
 from .main_window import MainWindow
 from .instructions_window import InstructionsWindow
@@ -72,10 +72,17 @@ class MenuWindow(QWidget):
     def start_game(self):
         mode = self.mode_selector.currentText()
         difficulty = self.difficulty_selector.currentText()
-        self.main_window = MainWindow(mode=mode, difficulty=difficulty)
+
+        username = None
+        if mode == "Player vs AI":
+            username = self._prompt_username_required()
+            if username is None:
+                return  # requirement not met, don't start
+
+        self.main_window = MainWindow(mode=mode, difficulty=difficulty, username=username)
         self.main_window.show()
         self.close()
-    
+
     def show_instructions_window(self):
         self.instructions_win = InstructionsWindow()
         self.instructions_win.show()
@@ -86,3 +93,28 @@ class MenuWindow(QWidget):
         self.leaderboard_win = LeaderboardWindow()
         self.leaderboard_win.show()
         self.close()
+
+    def _prompt_username_required(self) -> str | None:
+        """
+        Returns username if provided. Returns None if user cancels.
+        Requirement: username is mandatory for Player vs AI.
+        """
+        while True:
+            username, ok = QInputDialog.getText(
+                self,
+                "Username Required",
+                "Enter your username (required for Player vs AI):"
+            )
+
+            if not ok:
+                return None  # user cancelled
+
+            username = username.strip()
+            if username:
+                return username
+
+            QMessageBox.warning(
+                self,
+                "Missing Username",
+                "Username is required to play against AI."
+            )
