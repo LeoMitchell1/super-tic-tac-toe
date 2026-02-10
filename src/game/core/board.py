@@ -22,7 +22,7 @@ class Board(QWidget):
         self.score = 0
         self.start_time = None  # Track when first move is made
         self.time_taken = 0  # Time taken to complete the game
-        self.time_cap = 240  # 4 minutes time cap for scoring
+        self.time_cap = 120  # 2 minutes time cap for scoring
         
         outer_layout = QGridLayout(self)
         outer_layout.setContentsMargins(0, 0, 0, 0)
@@ -146,8 +146,6 @@ class Board(QWidget):
             square = mini_game.squares[square_row][square_col]
             self.make_move(square, mini_game_row, mini_game_col)
 
-        
-
     def get_available_moves(self):
         moves = []
         
@@ -226,60 +224,131 @@ class Board(QWidget):
         
         # 1. Try to win the overall game
         for move in moves:
-            mg_row, mg_col, sq_row, sq_col = move
-            mini_game = self.mini_games[mg_row][mg_col]
-            
-            # Simulate winning this mini-game - save original state
-            original_state = mini_game.squares[sq_row][sq_col].state
-            original_winner = mini_game.winner
-            
-            mini_game.squares[sq_row][sq_col].state = self.ai_player
-            
-            # Check if this would win the mini-game
-            if self.check_mini_game_win(mini_game, self.ai_player):
-                # Temporarily set winner to check overall game
-                mini_game.winner = self.ai_player
-                would_win = self.would_win_game(self.ai_player)
-                mini_game.winner = original_winner
-                
-                # Restore original state
-                mini_game.squares[sq_row][sq_col].state = original_state
-                
-                if would_win:
-                    return move
-            
-            # Restore original state
-            mini_game.squares[sq_row][sq_col].state = original_state
+            if self._leads_to_overall_win(move, self.ai_player):
+                return move
         
         # 2. Block human from winning the overall game
         for move in moves:
-            mg_row, mg_col, sq_row, sq_col = move
-            mini_game = self.mini_games[mg_row][mg_col]
-            
-            # Simulate human winning this mini-game - save original state
-            original_state = mini_game.squares[sq_row][sq_col].state
-            original_winner = mini_game.winner
-            
-            mini_game.squares[sq_row][sq_col].state = self.human_player
-            
-            # Check if this would win the mini-game
-            if self.check_mini_game_win(mini_game, self.human_player):
-                # Temporarily set winner to check overall game
-                mini_game.winner = self.human_player
-                would_win = self.would_win_game(self.human_player)
-                mini_game.winner = original_winner
-                
-                # Restore original state
-                mini_game.squares[sq_row][sq_col].state = original_state
-                
-                if would_win:
-                    return move
-            
-            # Restore original state
-            mini_game.squares[sq_row][sq_col].state = original_state
+            if self._leads_to_overall_win(move, self.human_player):
+                return move
         
-        # 3. Fall back to medium strategy
-        return self.get_medium_move()
+        # 3. Win any mini-game to build position
+        for move in moves:
+            if self._wins_mini_game(move, self.ai_player):
+                return move
+        
+        # 4. Block human from winning any mini-game
+        for move in moves:
+            if self._wins_mini_game(move, self.human_player):
+                return move
+        
+        # 5. Create two-in-a-row on main board (threatening position)
+        for move in moves:
+            if self._creates_two_in_row_main(move, self.ai_player):
+                return move
+        
+        # 6. Block human's two-in-a-row on main board
+        for move in moves:
+            if self._creates_two_in_row_main(move, self.human_player):
+                return move
+        
+        # 7. AVOID sending opponent to won/full boards (gives them freedom)
+        constrained_moves = [m for m in moves if not self._sends_to_won_or_full_board(m)]
+        if constrained_moves:
+            moves = constrained_moves
+        
+        # 8. Prefer center positions (stronger strategic value)
+        center_moves = [m for m in moves if self._is_center_position(m)]
+        if center_moves:
+            return random.choice(center_moves)
+        
+        # 9. Fall back to random from remaining moves
+        return random.choice(moves)
+
+    def _leads_to_overall_win(self, move, player):
+        """Check if move wins the overall game"""
+        mg_row, mg_col, sq_row, sq_col = move
+        mini_game = self.mini_games[mg_row][mg_col]
+        
+        original_state = mini_game.squares[sq_row][sq_col].state
+        original_winner = mini_game.winner
+        
+        mini_game.squares[sq_row][sq_col].state = player
+        
+        if self.check_mini_game_win(mini_game, player):
+            mini_game.winner = player
+            wins = self.would_win_game(player)
+            mini_game.winner = original_winner
+        else:
+            wins = False
+        
+        mini_game.squares[sq_row][sq_col].state = original_state
+        return wins
+
+    def _wins_mini_game(self, move, player):
+        """Check if move wins a mini-game"""
+        mg_row, mg_col, sq_row, sq_col = move
+        mini_game = self.mini_games[mg_row][mg_col]
+        
+        original = mini_game.squares[sq_row][sq_col].state
+        mini_game.squares[sq_row][sq_col].state = player
+        wins = self.check_mini_game_win(mini_game, player)
+        mini_game.squares[sq_row][sq_col].state = original
+        
+        return wins
+
+    def _creates_two_in_row_main(self, move, player):
+        """Check if winning this mini-game creates two-in-a-row on main board"""
+        if not self._wins_mini_game(move, player):
+            return False
+        
+        mg_row, mg_col = move[0], move[1]
+        
+        # Check if this creates 2-in-a-row on main board
+        # Check row
+        row_count = sum(1 for c in range(3) if self.mini_games[mg_row][c].winner == player)
+        if row_count == 1:  # Would become 2
+            return True
+        
+        # Check column
+        col_count = sum(1 for r in range(3) if self.mini_games[r][mg_col].winner == player)
+        if col_count == 1:  # Would become 2
+            return True
+        
+        # Check diagonals
+        if mg_row == mg_col:  # Main diagonal
+            diag_count = sum(1 for i in range(3) if self.mini_games[i][i].winner == player)
+            if diag_count == 1:
+                return True
+        
+        if mg_row + mg_col == 2:  # Anti-diagonal
+            anti_diag_count = sum(1 for i in range(3) if self.mini_games[i][2-i].winner == player)
+            if anti_diag_count == 1:
+                return True
+        
+        return False
+
+    def _is_center_position(self, move):
+        """Check if move is in a strategic center position"""
+        mg_row, mg_col, sq_row, sq_col = move
+        
+        # Prefer center mini-board
+        if mg_row == 1 and mg_col == 1:
+            return True
+        
+        # Prefer center square in any mini-board
+        if sq_row == 1 and sq_col == 1:
+            return True
+        
+        return False
+
+    def _sends_to_won_or_full_board(self, move):
+        """Check if move sends opponent to a won or full board (BAD - gives them freedom!)"""
+        sq_row, sq_col = move[2], move[3]
+        next_board = self.mini_games[sq_row][sq_col]
+        
+        # Return True if sending to won/full board (this is BAD for us)
+        return next_board.winner is not None or next_board.is_full
     
     def check_mini_game_win(self, mini_game, player):
         squares = mini_game.squares
@@ -432,15 +501,15 @@ class Board(QWidget):
         else:
             self.time_taken = 0
 
-        time_bonus = max(0, self.time_cap - int(self.time_taken)) 
+        time_bonus = 2 * max(0, self.time_cap - int(self.time_taken)) 
 
         if winner == "X":
             if self.difficulty == "Hard":
-                self.score = 1000 + time_bonus
+                self.score = 1500 + time_bonus
             elif self.difficulty == "Medium":
-                self.score = 600 + time_bonus
+                self.score = 1000 + time_bonus
             else:
-                self.score = 300 + time_bonus
+                self.score = 500 + time_bonus
 
         # Show modern pop-up
         dialog = GameResultDialog(winner, self.score, parent=self, username=self.username)

@@ -49,7 +49,7 @@ class MenuWindow(QWidget):
         self.difficulty_selector.setObjectName("menuComboBox")
         self.difficulty_selector.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.difficulty_selector.setMinimumWidth(360)
-        self.difficulty_selector.addItems(["Easy", "Medium", "Hard"])
+        self.difficulty_selector.addItems(["Easy (500+)", "Medium (1000+)", "Hard (1500+)"])
         layout.addWidget(self.difficulty_selector, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Buttons
@@ -108,6 +108,13 @@ class MenuWindow(QWidget):
     def start_game(self):
         mode = self.mode_selector.currentText()
         difficulty = self.difficulty_selector.currentText()
+        if difficulty == "Easy (500+)":
+            difficulty = "Easy"
+        elif difficulty == "Medium (1000+)":
+            difficulty = "Medium"
+        else:
+            difficulty = "Hard"
+
         username = None
         if mode == "Player vs AI":
             username = self._prompt_username_required()

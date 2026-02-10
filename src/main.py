@@ -13,6 +13,8 @@ def main():
 
     database.initialize_database()
 
+    database.clear_leaderboard()
+
     menu = MenuWindow()
     menu.showFullScreen()
 
