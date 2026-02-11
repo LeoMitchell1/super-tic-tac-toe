@@ -128,7 +128,7 @@ class Board(QWidget):
         
         # If AI mode and now it's AI's turn, make AI move after a short delay
         if self.difficulty is not None and self.current_player == self.ai_player:
-            QTimer.singleShot(500, self.ai_make_move)  # 500ms delay for better UX
+            QTimer.singleShot(200, self.ai_make_move)  # 10ms delay for better UX
 
     def ai_make_move(self):
         if self.difficulty == "Easy":
@@ -501,13 +501,13 @@ class Board(QWidget):
         else:
             self.time_taken = 0
 
-        time_bonus = 2 * max(0, self.time_cap - int(self.time_taken)) 
+        time_bonus = max(0, self.time_cap - int(self.time_taken)) 
 
         if winner == "X":
             if self.difficulty == "Hard":
-                self.score = 1500 + time_bonus
+                self.score = 900 + time_bonus
             elif self.difficulty == "Medium":
-                self.score = 1000 + time_bonus
+                self.score = 700 + time_bonus
             else:
                 self.score = 500 + time_bonus
 

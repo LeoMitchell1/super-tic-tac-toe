@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from .main_window import MainWindow
 from .instructions_window import InstructionsWindow
-from game.data.database import get_usernames, clear_leaderboard
+from game.data.database import get_usernames
 
 
 class MenuWindow(QWidget):
@@ -49,7 +49,7 @@ class MenuWindow(QWidget):
         self.difficulty_selector.setObjectName("menuComboBox")
         self.difficulty_selector.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.difficulty_selector.setMinimumWidth(360)
-        self.difficulty_selector.addItems(["Easy (500+)", "Medium (1000+)", "Hard (1500+)"])
+        self.difficulty_selector.addItems(["Easy (500+)", "Medium (700+)", "Hard (900+)"])
         layout.addWidget(self.difficulty_selector, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Buttons
@@ -110,7 +110,7 @@ class MenuWindow(QWidget):
         difficulty = self.difficulty_selector.currentText()
         if difficulty == "Easy (500+)":
             difficulty = "Easy"
-        elif difficulty == "Medium (1000+)":
+        elif difficulty == "Medium (700+)":
             difficulty = "Medium"
         else:
             difficulty = "Hard"

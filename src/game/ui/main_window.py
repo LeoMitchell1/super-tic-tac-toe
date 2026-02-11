@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
             
             self.countdown_timer = QTimer()
             self.countdown_timer.timeout.connect(self.update_timer)
-            self.time_remaining = 3
+            self.time_remaining = 4
         
         self.board = Board(
             difficulty=self.difficulty if self.mode == "Player vs AI" else None,
@@ -81,8 +81,8 @@ class MainWindow(QMainWindow):
             self.timer_label.setText("AI")
             self.update_timer_color()
             return
-        self.time_remaining = 3
-        self.timer_label.setText("3")
+        self.time_remaining = 4
+        self.timer_label.setText("4")
         self.update_timer_color()
         self.countdown_timer.start(1000)
     
